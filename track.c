@@ -64,6 +64,7 @@
      cvFindContours(tempImage, storage, &contours, sizeof(CvContour),
         CV_RETR_LIST, CV_CHAIN_APPROX_TC89_KCOS, cvPoint(0,0));
 
+     // fill in the countours
      while(contours)
      {
          CvScalar white = CV_RGB(255, 255, 255);
@@ -80,6 +81,7 @@
      cvFindContours(tempImage, storage, &contours, sizeof(CvContour),
          CV_RETR_LIST, CV_CHAIN_APPROX_TC89_KCOS, cvPoint(0,0));
 
+     // find rectangles
      while(contours)
      {
          CvSeq* result = cvApproxPoly(contours, sizeof(CvContour), storage,
