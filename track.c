@@ -26,7 +26,7 @@
    while ( 1 ) {
      // Get one frame
      IplImage* frame = cvQueryFrame( capture );
-     //IplImage* frame = cvLoadImage("/home/dhawes/NetBeansProjects/Sample/VisionImages/First Choice Green Images/HybridLine_SmallGreen2.jpg");
+     //IplImage* frame = cvLoadImage("/home/dhawes/NetBeansProjects/Sample/VisionImages/First Choice Green Images/HybridLine_SmallGreen4.jpg");
      //IplImage* frame = cvLoadImage("/home/dhawes/NetBeansProjects/Sample/VisionImages/Other Images/OppLine_DoubleGreenBK2.jpg");
      if ( !frame ) {
        fprintf( stderr, "ERROR: frame is null...\n" );
@@ -45,10 +45,6 @@
      cvCvtColor(frame, hsv, CV_BGR2HSV);
      cvSplit(hsv, hue, sat, val, NULL);
 
-/*
-     cvInRangeS(hsv, cvScalar(60, 90, 20), cvScalar(100, 255, 255),
-                bin);
-*/
      cvThreshold(hue, bin, 60, 100, CV_THRESH_BINARY);
      cvThreshold(hue, hue, 60+15, 100, CV_THRESH_BINARY_INV);
      cvThreshold(sat, sat, 90, 255, CV_THRESH_BINARY);
@@ -63,7 +59,6 @@
      cvCopy(bin, tempImage);
 
      CvSeq* contours; 
-     CvSeq* result;
      CvMemStorage* storage = cvCreateMemStorage(0);
 
      cvFindContours(tempImage, storage, &contours, sizeof(CvContour),
@@ -72,8 +67,8 @@
      while(contours)
      {
          CvScalar white = CV_RGB(255, 255, 255);
-         CvSeq* convexContour = cvConvexHull2(contours, storage, CV_CLOCKWISE,
-            1);
+         CvSeq* convexContour =
+           cvConvexHull2(contours, storage, CV_CLOCKWISE, 1);
          cvDrawContours(
            tempImage, convexContour, white, white, -1, CV_FILLED, 8);
          contours = contours->h_next;
@@ -87,12 +82,8 @@
 
      while(contours)
      {
-         CvSeq* convexContour =
-           cvConvexHull2(contours, storage, CV_CLOCKWISE, 1);
-         result = cvApproxPoly(convexContour, sizeof(CvContour), storage,
-         //result = cvApproxPoly(contours, sizeof(CvContour), storage,
-           //CV_POLY_APPROX_DP, cvContourPerimeter(contours)*0.02, 0);
-           CV_POLY_APPROX_DP, 10, 0);
+         CvSeq* result = cvApproxPoly(contours, sizeof(CvContour), storage,
+             CV_POLY_APPROX_DP, 10, 0);
          CvRect boundingRect = cvBoundingRect(result, 0);
 
          printf("width = %d, height = %d\n", boundingRect.width,
@@ -117,7 +108,6 @@
             cvCircle(frame, cvPoint(boundingRect.x + boundingRect.width / 2,
                 boundingRect.y + boundingRect.height / 2), 2,
                 cvScalar(0, 255, 255), 2);
-	   //usleep(1000);
          }
          contours = contours->h_next;
          printf("=\n");
@@ -131,11 +121,8 @@
      cvReleaseImage(&sat);
      cvReleaseImage(&val);
      cvReleaseImage(&tempImage);
-     //cvReleaseImage(&frame);
      cvReleaseMemStorage(&storage);
 
-
-     // Do not release the frame!
      //If ESC key pressed, Key=0x10001B under OpenCV 0.9.7(linux version),
      //remove higher bits using AND operator
      if ( (cvWaitKey(10) & 255) == 27 ) break;
@@ -143,7 +130,6 @@
      printf("Done.\n");
    }
 
-   // Release the capture device housekeeping
    cvReleaseCapture( &capture );
    cvDestroyWindow( "tracking" );
    cvDestroyWindow( "filled" );
