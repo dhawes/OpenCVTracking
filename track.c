@@ -6,7 +6,7 @@
  int main() {
    CvCapture* capture = cvCaptureFromCAM( CV_CAP_ANY );
    //CvCapture* capture =
-   //  cvCreateFileCapture("http://128.173.201.214/jpg/image.jpg");
+   //  cvCreateFileCapture("http://128.173.201.214/mjpg/video.mjpg");
    cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, 320);
    cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, 240);
    //cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, 640);
