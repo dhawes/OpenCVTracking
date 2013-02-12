@@ -5,10 +5,12 @@
  // A Simple Camera Capture Framework 
  int main() {
    CvCapture* capture = cvCaptureFromCAM( CV_CAP_ANY );
-   //cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, 320);
-   //cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, 240);
-   cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, 640);
-   cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, 480);
+   //CvCapture* capture =
+   //  cvCreateFileCapture("http://128.173.201.214/jpg/image.jpg");
+   cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, 320);
+   cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, 240);
+   //cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, 640);
+   //cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, 480);
    if ( !capture ) {
      fprintf( stderr, "ERROR: capture is NULL \n" );
      getchar();
@@ -24,7 +26,8 @@
    while ( 1 ) {
      // Get one frame
      IplImage* frame = cvQueryFrame( capture );
-     //IplImage* frame = cvLoadImage("/home/dhawes/NetBeansProjects/Sample/VisionImages/First Choice Green Images/HybridLine_SmallGreen3.jpg");
+     //IplImage* frame = cvLoadImage("/home/dhawes/NetBeansProjects/Sample/VisionImages/First Choice Green Images/HybridLine_SmallGreen2.jpg");
+     //IplImage* frame = cvLoadImage("/home/dhawes/NetBeansProjects/Sample/VisionImages/Other Images/OppLine_DoubleGreenBK2.jpg");
      if ( !frame ) {
        fprintf( stderr, "ERROR: frame is null...\n" );
        getchar();
@@ -86,16 +89,15 @@
      {
          CvSeq* convexContour =
            cvConvexHull2(contours, storage, CV_CLOCKWISE, 1);
-         //result = cvApproxPoly(convexContour, sizeof(CvContour), storage,
-         //  CV_POLY_APPROX_DP, cvContourPerimeter(contours)*0.02, 0);
-         result = cvApproxPoly(contours, sizeof(CvContour), storage,
+         result = cvApproxPoly(convexContour, sizeof(CvContour), storage,
+         //result = cvApproxPoly(contours, sizeof(CvContour), storage,
            //CV_POLY_APPROX_DP, cvContourPerimeter(contours)*0.02, 0);
            CV_POLY_APPROX_DP, 10, 0);
          CvRect boundingRect = cvBoundingRect(result, 0);
 
          printf("width = %d, height = %d\n", boundingRect.width,
                 boundingRect.height);
-         printf("perimeter = %f\n", cvContourPerimeter(contours));
+         printf("perimeter = %f\n", cvContourPerimeter(result));
          printf("area = %f\n", cvContourArea(result, CV_WHOLE_SEQ));
 
          if(result->total == 4 &&
@@ -140,6 +142,7 @@
 
      printf("Done.\n");
    }
+
    // Release the capture device housekeeping
    cvReleaseCapture( &capture );
    cvDestroyWindow( "tracking" );
