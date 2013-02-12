@@ -5,8 +5,10 @@
  // A Simple Camera Capture Framework 
  int main() {
    CvCapture* capture = cvCaptureFromCAM( CV_CAP_ANY );
-   cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, 320);
-   cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, 240);
+   //cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, 320);
+   //cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, 240);
+   cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH, 640);
+   cvSetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT, 480);
    if ( !capture ) {
      fprintf( stderr, "ERROR: capture is NULL \n" );
      getchar();
@@ -21,8 +23,8 @@
    // Show the image captured from the camera in the window and repeat
    while ( 1 ) {
      // Get one frame
-     //IplImage* frame = cvQueryFrame( capture );
-     IplImage* frame = cvLoadImage("/home/dhawes/NetBeansProjects/Sample/VisionImages/First Choice Green Images/HybridLine_SmallGreen4.jpg");
+     IplImage* frame = cvQueryFrame( capture );
+     //IplImage* frame = cvLoadImage("/home/dhawes/NetBeansProjects/Sample/VisionImages/First Choice Green Images/HybridLine_SmallGreen3.jpg");
      if ( !frame ) {
        fprintf( stderr, "ERROR: frame is null...\n" );
        getchar();
@@ -87,7 +89,8 @@
          //result = cvApproxPoly(convexContour, sizeof(CvContour), storage,
          //  CV_POLY_APPROX_DP, cvContourPerimeter(contours)*0.02, 0);
          result = cvApproxPoly(contours, sizeof(CvContour), storage,
-           CV_POLY_APPROX_DP, cvContourPerimeter(contours)*0.02, 0);
+           //CV_POLY_APPROX_DP, cvContourPerimeter(contours)*0.02, 0);
+           CV_POLY_APPROX_DP, 10, 0);
          CvRect boundingRect = cvBoundingRect(result, 0);
 
          printf("width = %d, height = %d\n", boundingRect.width,
@@ -113,20 +116,6 @@
                 boundingRect.y + boundingRect.height / 2), 2,
                 cvScalar(0, 255, 255), 2);
 	   //usleep(1000);
-         }
-         else
-         {
-            CvPoint *pt[4];
-            for(int i=0; i < 4 ;i++)
-                pt[i] = (CvPoint*)cvGetSeqElem(result, i);
- 
-            cvLine(frame, *pt[0], *pt[1], cvScalar(0, 255, 255), 2);
-            cvLine(frame, *pt[1], *pt[2], cvScalar(0, 255, 255), 2);
-            cvLine(frame, *pt[2], *pt[3], cvScalar(0, 255, 255), 2);
-            cvLine(frame, *pt[3], *pt[0], cvScalar(0, 255, 255), 2);
-            cvCircle(frame, cvPoint(boundingRect.x + boundingRect.width / 2,
-                boundingRect.y + boundingRect.height / 2), 2,
-                cvScalar(0, 255, 255), 2);
          }
          contours = contours->h_next;
          printf("=\n");
